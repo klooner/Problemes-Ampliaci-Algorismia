@@ -91,5 +91,20 @@ Finalment,
 \end{eqnarray}
 \renewcommand\qedsymbol{$\blacksquare$}
 \qed
-
+\newpage
+\section{Problema 13}
+\subsection{Enunciat}
+The \textbf{Set Packing problem} is defined as follows: 
+\newline 
+Given a family of sets $S_1,...,S_m \subseteq U$ such that, for $1 \leq i \leq m$, $|S_i| = 3$ and has profit $c(S_i)$, find a subset of these sets that maximizes the profit, while each element is covered at most once. Provide a integer linear programming formulation for the problem.
+\subsection{Solució}
+\begin{alignat*}{2}
+    \text{maximize }   & \sum_{j=1}^m c(S_j)x_j  \\
+    \text{subject to } & \sum_{i=1}^{m} p_{ij}x_j \leq 1 \ , \  1\leq i\leq |U|\\
+                       & x_j = \{0,1\},\  1\leq j\leq m\\
+                       & p_{ij} = \{0,1\},\  1\leq j\leq m\ ,\  1\leq i\leq |U|
+\end{alignat*}
+$x_j$: Set $j$ is selected.
+\newline
+$p_{ij}$: Element $i$ pertains to the set $j$. Input of the problem. 
 \end{document}
