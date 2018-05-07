@@ -1,0 +1,60 @@
+\section{Problema 27}
+\subsection{Enunciat}
+Show that the following parameterized edge deletion problem belongs to FPT.
+\par
+\textbf{TRIANGLE ELIMINATION($G$, $k$)}: $G$ is a graph and $k\geq0$ an integer.
+\par
+Parameter: $k$
+\par
+Question: Does it exist an edge subset $F$ so that $|F| \leq k$ and $G-F$ has no triangles?
+
+\subsection{Solució}
+Per demostrar que el problema pertany a FPT, hem de donar un algorisme amb cost $O(f(k)*|x|^{O(1)})$.
+En aquest cas farem servir la tècnica del \textit{bounded tree search} limitat a $k$ passos.
+\par
+\textbf{TRI-ELIM-BTS($G=\{V,E\}$, $k$)}: $G$ is a graph and $k\geq0$ an integer.
+
+%TODO: an edge could belong to multiple triangles. return a set of tuples of edges
+\begin{algorithm}
+\caption{TRI-ELIM-BTS}\label{euclid}
+\begin{algorithmic}[1]
+\Function{getTriEdges}{$e$} \Comment{Returns a list of 2-tuples of edges}
+\State{($v_s$, $v_e$) $\gets$ $e$}
+\State{$l \gets \emptyset$}
+\For{$v_{sn}$ in neighbours($v_s$)}
+    \For{$v_{en}$ in neighbours($v_e$)}
+        \If{$v_{sn} == v_{en}$}
+            \State{$e_1 \gets (v_{s}, v_{sn})$}
+            \State{$e_2 \gets (v_{e}, v_{en})$}
+            \State $l$.append(($e_1$, $e_2$))
+        \EndIf
+    \EndFor
+\EndFor
+\State \Return $l$
+\EndFunction
+\newline
+\Function{TRI-ELIM-BTS}{$G=\{V,E\}$, $k$}
+\If{$k == 0$}
+    \State \Return false
+\EndIf
+\State{found $\gets$ false} \Comment{Graph without triangles found}
+\State{trifound $\gets$ false} \Comment{Triangle found in current graph}
+\For{$e_1$ in $E$}
+    \State {found $\gets$ TRI-ELIM-BTS($G-e_1$, $k-1$)}
+    \State {$l \gets getTriEdges(e_1)$}
+    \For{$t$ in $l$}
+    \State{trifound $\gets$ true}
+    \State{($e_2$, $e_3$) $\gets$ $t$}
+    \State {found $\gets$ found $||$ TRI-ELIM-BTS($G-e_2$, $k-1$)}
+    \State {found $\gets$ found $||$ TRI-ELIM-BTS($G-e_3$, $k-1$)}
+    \EndFor
+    \If{found}
+    \State \Return true
+    \EndIf
+\EndFor
+\State \Return{\textbf{not} trifound} \Comment{If no triangle found, return true}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+%% |E|*
