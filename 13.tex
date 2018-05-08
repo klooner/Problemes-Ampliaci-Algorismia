@@ -6,10 +6,7 @@ Given a family of sets $S_1,...,S_m \subseteq U$ such that, for $1 \leq i \leq m
 \subsection{Solució}
 \begin{alignat*}{2}
     \text{maximize }   & \sum_{j=1}^m c(S_j)x_j  \\
-    \text{subject to } & \sum_{i=1}^{m} p_{ij}x_j \leq 1 \ , \  1\leq i\leq |U|\\
-                       & x_j = \{0,1\},\  1\leq j\leq m\\
-                       & p_{ij} = \{0,1\},\  1\leq j\leq m\ ,\  1\leq i\leq |U|
+    \text{subject to } & \sum_{\forall_j:v \in S_j}^m x_j \ \leq 1,\ \forall_{v \in U}\\
+                       & x_j = \{0,1\},\  1\leq j\leq m
 \end{alignat*}
 $x_j$: Set $j$ is selected.
-\newline
-$p_{ij}$: Element $i$ pertains to the set $j$. Input of the problem. 

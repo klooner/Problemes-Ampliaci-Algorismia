@@ -1,0 +1,8 @@
+\section{Problema 16}
+\subsection{Enunciat}
+Consider the \textbf{Set Packing problem} as defined in problem 13 and its integer linear programming formulation on variables $x_1,...,x_n$ where variable $x_i$ indicates whether set $S_i$ is or is not in the packing. Consider the following algorithm that, first computes an optimal solution $x^{*}$ of the LP obtained by relaxing $x_i \in [0,1]$, and second performs the following rounding algorithm:
+\begin{itemize}
+    \item (1) Choose a set $S_i$ to be in the solution with probability $\frac{x^{*}_i}{6}$.\\
+    \item (2) If an element $u \in U$ is covered by more than one set, remove all the sets in the solution that contain $u$.
+\end{itemize}
+\subsection{Solució}
