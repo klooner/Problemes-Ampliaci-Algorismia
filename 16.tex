@@ -6,3 +6,36 @@ Consider the \textbf{Set Packing problem} as defined in problem 13 and its integ
     \item (2) If an element $u \in U$ is covered by more than one set, remove all the sets in the solution that contain $u$.
 \end{itemize}
 \subsection{Solució}
+Hem de demostrar que l'algorisme donat es una 12-aproximació de \textbf{Set Packing}.
+\subsubsection{Demostració}
+El valor òptim es $C=\sum_{\forall_i}x_ic(S_i)$ on $x_i$ és la solució de la formulació ILP donada al problema 13.
+Donats $Sol_1$ com el resultat del algorisme després del pas 1 i $Sol_2$ el resultat després del pas 2 i $a_i$ una variable indicadora tal que:
+\[
+    a_{i} = 
+\begin{cases}
+    1,  & \text{si } S_i \in Sol_2\\
+    0,  & \text{altrament}
+\end{cases}
+\]
+Definim $C^{*}$ com el valor del profit a $Sol_2$:
+\[
+C^{*} = \sum_{\forall_i} a_i c(S_i)
+\]
+Per tant:
+\[
+E[C^{*}]=\sum_{\forall_i}P[a_i=1]c(S_i)
+\]
+\begin{eqnarray}
+    P[a_i=1]=P[S_i \in Sol_1] \cap P[S_i \in Sol_2 | S_i \in Sol_1] \nonumber\\
+    P[S_i \in Sol_1] = \frac{x_i^{*}}{6} \nonumber\\
+    P[S_i \in Sol_2 | S_i \in Sol_1] = P[\bigcap_{S_j \cap S_i \neq \emptyset}S_j \notin Sol_1] = 1-P[\bigcup_{S_j \cap S_i \neq \emptyset} S_j \in Sol_1]\\
+    P[\bigcup_{S_j \cap S_i \neq \emptyset}S_j \in Sol_1] \leq \sum_{S_j \cap S_i \neq \emptyset} P[S_j \in Sol_1] = \frac{1}{6}\sum_{S_j \cap S_i \neq \emptyset} x_j^{*}\leq \frac{1}{2}\\
+    \Rightarrow 1-P[\bigcup_{S_j \cap S_i \neq \emptyset} S_i \in Sol_1] \geq \frac{1}{2}\nonumber\\
+    \Rightarrow P[a_i=1] \geq \frac{x_i^{*}}{6}*\frac{1}{2}\geq \frac{x_i}{12}
+\end{eqnarray}
+\begin{itemize}
+    \item (4) La probabilitat de passar el filtre del pas 2 es la probabilitat de que cap dels sets que comparteixen elements amb ell pertanyin a $Sol_1$, en altres paraules, la probabilitat complementaria a que algun dels que comparteixen elements pertanyi a $Sol_1$.
+    \item (5) Com que cada set conté 3 elements, $\sum_{S_j \cap S_i \neq \emptyset}x_j^{*} \leq 3$, ja que només poden compartir algun dels 3 elements i les variables només poden arribar a 1 segons la formulació LP
+    \item (6) Ja que LP$>$ILP
+\end{itemize}
+\qed
