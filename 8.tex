@@ -20,87 +20,71 @@ Consider the following randomized algorithm.
 Prove that \textbf{RWVC} is a randomized 2-approximation for \textbf{Minimum weighted vertex cover} problem.
 \subsection{Solució}
 
-Per veure que \textbf{RWVC} es una 2-aproximació de \textbf{Minimum weighted vertex cover} problem hem de demostrar el següent:
+Per veure que \textbf{RWVC} es una 2-aproximació randomitzada de \textbf{Minimum weighted vertex cover} problem hem de demostrar el següent:
 \[
-w(s) \leq 2w(s^{*})
+E[w(s)] \leq 2E[w(s^{*})]
 \]
 On:
 \begin{itemize}
     \item $s^{*}$ és la solució òptima
     \item $s$ és la solució obtinguda amb \textbf{RWVC}
-    \item $s_i$ és la solució acumulada a la iteració $i$
-    \item $w(X)$ és la suma total de pesos al conjunt $X$
+    \item $s_i$ és la solució parcial obtinguda a la iteració $i$
+    \item $p$ és el conjunt que té els elements que es troben tant a la solució òptima com a la solució parcial. Es a dir: $p=s \cap s^{*}$. $p_i$ és el mateix però utilitzant $s_i$.
+    \item $r$ és el conjunt que té els elements que es troben a la solució parcial però no a la solució òptima. Es a dir: $r=s \setminus s^{*}$. $r_i$ és el mateix però utilitzant $s_i$.
+    \item $w(x)$ és la suma total de pesos al conjunt $x$
+    \item $x_i^{inc}$ és l'increment de pes a la iteració $i$ al conjunt $x$. Es a dir: $x_i^{inc} = w(x_i) - w(x_{i-1})$
+    
 \end{itemize}
 \newpage
 \subsubsection{Demostració}
 Per començar definirem el següent lema:
-\newline
 \par
 \textbf{Lema b}: L'esperança de la suma dels pesos que apareixen tant a $s$ com a $s^{*}$, és més gran que l'esperança de la suma dels pesos dels elements que apareixen a $s$ però no a $s^{*}$. Per tant:
 \[
-E[w(s \cap s^{*})] \geq E[w(s / s^{*})]
+E[w(p)] \geq E[w(r)]
 \]
 \textbf{Demostració lema b:}
 \newline
-Ho demostrarem per inducció. Primer demostrarem el cas base: 
+Per fer-ho, pensarem en què passa al afegir un vèrtex a $s_i$. Sabem que el vèrtex és un extrem de la aresta $(v,t)$, la qual no està coberta. Per tant,  $s^{*}$ ha de contenir almenys un dels dos vèrtexs:
+\begin{eqnarray}
+    w(p_i) \geq \min_{\{w(v), w(t)\}}+w(p_{i-1}) \\
+    E[w(v)] = w(v)*P[x=v]=\frac{w(v)w(t)}{w(v)+w(t)} = w(t)*(1-P[x=v]) = E[w(t)] \\
+    E[p_i^{inc}] \geq \frac{w(v)*w(t)}{w(v)+w(t)}
+\end{eqnarray}
+\begin{itemize}
+    \item (4) El pes de $p_i$ és més gran o igual que el pes mínim de $v$ o $t$ més el pes que ja teníem ($p_{i-1}$), ja que almenys afegirem un dels dos. 
+    \item (5) L'esperança del pes de $v$ és igual a l'esperança del pes de $t$
+    \item (6) Per tant, per (4) i (5), l'increment mínim a l'esperança de $p_i$ és l'esperança del pes de $v$ o $t$, que és el mateix.
+\end{itemize}
+Degut a això, com que afegim un dels vèrtexs de $s^{*}$ a $s_i$, a $r$ només podem incloure un dels dos com a màxim (l'altre vèrtex o cap). Per tant:
+\begin{eqnarray}
+    w(r_i) \geq \max_{\{w(v), w(t)\}}+w(r_{i-1}) \\
+    E[r_i^{inc}] \leq \frac{w(v)*w(t)}{w(v)+w(t)}
+\end{eqnarray}
+\begin{itemize}
+    \item (7) El pes de $r_i$ és com a molt el pes que ja teníem més el màxim del pes de $v$ o $t$.
+    \item (8) Com hem vist a (5), l'esperança del pes de $v$ i $t$ es la mateixa, i com que sabem com a molt inclourem només un vèrtex, l'increment a l'esperança de $r_i$ és més petit o igual a aquesta esperança.
+\end{itemize}
+Per tant, per (6) i (8), tenim:
 \[
-E[w(s_0 \cap s^{*})] \geq E[w(s_0 / s^{*})]
+E[w(p_i^{inc})] \geq \frac{w(v)w(t)}{w(v)+w(t)} \geq E[w(r_i^{inc})]
 \]
-
-A cada iteració agafem una aresta $(u,v) \in E$ i triem un dels dos vèrtexs amb probabilitat  
+Com que aquesta desigualtat es compleix per tot $i$, desprès de realitzar els $i$ increments sabem que:
 \[
-P[u]=\frac{w(u)}{w(u)+w(v)}
-\]
-pel vèrtex $u$ i probabilitat
-\[
-P[v]=1-P[u]
-\]
-%TODO: if this is minimization, s* should have the minimum weight vertexs instead?
-pel vèrtex $v$. Per cada aresta, la solució $s^{*}$ agafa el vèrtex de més pes. Es a dir, sempre que agafem el vèrtex de més pes estem incrementant $w(s \cap s^{*})$, i en cas d'agafar el més petit incrementem $w(s/s^{*})$.
-%TODO: should this be demonstrated developing the Expected value formula?
-Com que és més probable agafar el node de més pes, i abans de la primera iteració $w(s_0 \cap s^{*}) = w(s_0 / s^{*})$, el més probable és que comencem augmentant $w(s \cap s^{*})$ i, per tant
-\[
-E[w(s_0 \cap s^{*})] \geq E[w(s_0 / s^{*})]
-\]
-
-A continuació demostrarem el cas general (suposem que és cert per a $i$ i demostrem que és cert per a $i+1$):
-\[
-\forall_i(E[w(s_i \cap s^{*})] \geq E[w(s_i / s^{*})] \Rightarrow E[w(s_{i+1} \cap s^{*})] \geq E[w(s_{i+1}/s^{*})])
-\]
-
-%TODO: is this enough to prove the induction step?
-Amb el mateix raonament que al cas base, si en una iteració $i$ tenim 
-\[
-w(s_i \cap s^{*}) \geq w(s_i / s^{*})
-\]
-llavors
-\[
-E[w(s_{i+1} \cap s^{*})] \geq E[w(s_{i+1} / s^{*})]
+E[w(p)] \geq E[w(r)]
 \]
 \renewcommand\qedsymbol{$\square$}
 \qed
 \newpage
-
-%TODO: lemma a is supposed to be applied here. Some of this definitions should be Expected values
-Ara tenim:
+Degut al \textbf{lema b} sabem que:
+\begin{eqnarray}
+    E[w(p)] \geq E[w(r)]\nonumber \\
+    = E[w(s \cap s^{*})] \geq E[w(s \setminus s^{*})] \nonumber \\
+    E[w(s^{*})] \geq E[w(s)] - E[w(s^{*})]  \\
+    \Rightarrow 2E[w(s^{*})] \geq E[w(s)] \nonumber
+\end{eqnarray}
 \begin{itemize}
-    \item $w_c = w(s \cap s^{*})$
-    \item $w_e = w(s / s^{*})$
-    \item $w_{c'} = w(s \cap s^{*})$
-    \item $w(s) = w_c+w_e$
-    \item $w(s^{*}) = w_c+w_{c'}$
+    \item (9) Ja que $s \cap s^{*} \subseteq s^{*} \Rightarrow w(s \cap s^{*}) \leq w(s^{*})$ i $w(s \setminus s^{*}) = w(s) - w(s^{*})$.
 \end{itemize}
-\begin{eqnarray}
-    w_c+w_e \leq w_c+w_e \nonumber\\ 
-    w_c+w_e \leq w_c+w_e+w_{c'}  \nonumber\\ 
-    w(s) \leq w(s*)+w_e  \nonumber
-\end{eqnarray}
-Per canviar $w_e$ per $w(s^{*})$ i obtenir $w_e \leq w(s^{*})*2$, demostrem $w_e \leq w(s^{*})$.
-Pel \textbf{lema b} tenim:
-\begin{eqnarray}
-    w_c \geq w_e \nonumber\\ 
-    w_c+w_{c'} \geq w_e  \nonumber\\ 
-    w(s^{*}) \geq w_e  \nonumber
-\end{eqnarray}
 \renewcommand\qedsymbol{$\blacksquare$}
 \qed

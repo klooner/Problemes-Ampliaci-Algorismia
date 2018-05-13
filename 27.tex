@@ -14,7 +14,7 @@ En aquest cas farem servir la tècnica del \textit{bounded tree search} limitat 
 \par
 \textbf{TRI-ELIM-BTS($G=\{V,E\}$, $k$)}: $G$ is a graph and $k\geq0$ an integer.
 
-%TODO: an edge could belong to multiple triangles. return a set of tuples of edges
+
 \begin{algorithm}
 \caption{TRI-ELIM-BTS}\label{euclid}
 \begin{algorithmic}[1]
@@ -40,10 +40,12 @@ En aquest cas farem servir la tècnica del \textit{bounded tree search} limitat 
 \State{found $\gets$ false} \Comment{Graph without triangles found}
 \State{trifound $\gets$ false} \Comment{Triangle found in current graph}
 \For{$e_1$ in $E$}
-    \State {found $\gets$ TRI-ELIM-BTS($G-e_1$, $k-1$)}
     \State {$l \gets getTriEdges(e_1)$}
+    \If{$l$ \textbf{is not null}}
+        \State{trifound $\gets$ true}
+        \State {found $\gets$ TRI-ELIM-BTS($G-e_1$, $k-1$)}    
+    \EndIf
     \For{$t$ in $l$}
-    \State{trifound $\gets$ true}
     \State{($e_2$, $e_3$) $\gets$ $t$}
     \State {found $\gets$ found $||$ TRI-ELIM-BTS($G-e_2$, $k-1$)}
     \State {found $\gets$ found $||$ TRI-ELIM-BTS($G-e_3$, $k-1$)}
