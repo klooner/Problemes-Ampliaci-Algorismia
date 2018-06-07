@@ -1,0 +1,27 @@
+\section{Problema examen 1}
+\subsection{Enunciat}
+\textbf{Tree with incentives and penalties.} AdAll is a marketing company that is planning an advertising campaign in a social network by traditional word of mouth with incentives. 
+
+The social network is given by an undirected graph $G = (V,E)$, having edge cost $c_e \geq 0$, for each $e \in E$, and a penalty $p_i \geq 0$, for each $i \in V$ . The values $c_e$, for $e = (u,v)$ represent the incentive estimated by AdAll that is required to guarantee that the ad will be passed from $u$ to $v$ or viceversa, assuming that it reaches $u$ (or $v$). The value $p_u$ is an estimation of the cost of excluding $u$ from the campaign. AdAll has an initiating agent $r \in V$ and wants to estimate the suitability of the cheapest campaign. The goal is to find a tree $T$ rooted at $r$ that minimizes the cost of the edges in the tree plus the penalties of all vertices not in the tree.
+
+AdAll has a polynomial time algorithm (\textit{Simple}) for solving a simplified version of the problem in which no vertex can be excluded from the campaign. In the following we use indicator variables $y_i$ for vertex $i \in V$ and $x_e$ for edge $e \in E$. Furthermore, we use $\delta(S)$, for $S \subseteq V$ , to denote the edges crossing the cut $(S,V-S)$. 
+
+\begin{itemize}
+    \item (a) Consider that $x_e,y_i \in{0,1}$ verify the following set of inequalities 
+    \[
+    \sum_{x_e \in \delta(S)}x_e \ge y_i,  \forall S \subseteq V -{r},S \neq \emptyset,\forall i \in S
+    \] 
+    Show that in such a case the subgraph formed by the vertices with $y_i = 1$ and the edges with $x_e  = 1$ form a tree. 
+    \item (b) Using the above result provide a ILP formulation of the problem. Observe that the number of equations is $n2n$. 
+    \item (c) Consider the LP obtained after relaxing the ILP formulation. Let $(x^{*},y^{*})$ be an optimal solution of the LP and let $\alpha \in (0,1]$. Let $U = \{i \in V | y^{*}_i \geq \alpha\}$ and let $T$ be the tree produced by Simple on input $G[U]$. Show that 
+    \[
+    \sum_{e\in T} c_e \leq \frac{2}{\alpha} \sum_{e\in E} c_e x^{*}_e
+    \] 
+    and that 
+    \[
+    \sum_{i \in V-V(T)} p_i \leq \frac{1}{1-\alpha} \sum_{i \in V}p_i(1-y^{*}_i)
+    \]. 
+    \item (d) Assuming that a solution to the LP can be computed in polynomial time, can you design a 3-approximation for AdAll’s problem?
+\end{itemize}
+
+\subsection{Solució}
