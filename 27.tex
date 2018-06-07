@@ -10,53 +10,74 @@ Question: Does it exist an edge subset $F$ so that $|F| \leq k$ and $G-F$ has no
 
 \subsection{Solució}
 Per demostrar que el problema pertany a FPT, hem de donar un algorisme amb cost $O(f(k)*|x|^{O(1)})$.
-En aquest cas farem servir la tècnica del \textit{bounded tree search} limitat a $k$ passos.
+En aquest cas farem servir la tècnica del \textit{bounded search tree} limitat a $k$ passos.
 \par
-\textbf{TRI-ELIM-BTS($G=\{V,E\}$, $k$)}: $G$ is a graph and $k\geq0$ an integer.
+\textbf{TRI-ELIM-BST($G=\{V,E\}$, $k$)}: $G$ is a graph and $k\geq0$ an integer.
 
 
 \begin{algorithm}
-\caption{TRI-ELIM-BTS}\label{euclid}
+\caption{TRI-ELIM-BST}\label{euclid}
 \begin{algorithmic}[1]
-\Function{getTriEdges}{$e$} \Comment{Returns a list of 2-tuples of edges}
+\Function{getTriangle}{$e$} \Comment{If e forms a triangle, returns the other 2 edges}
 \State{($v_s$, $v_e$) $\gets$ $e$}
 \State{$l \gets \emptyset$}
 \For{$v_{sn}$ in neighbours($v_s$)}
     \For{$v_{en}$ in neighbours($v_e$)}
         \If{$v_{sn} == v_{en}$}
-            \State{$e_1 \gets (v_{s}, v_{sn})$}
-            \State{$e_2 \gets (v_{e}, v_{en})$}
-            \State $l$.append(($e_1$, $e_2$))
+            \State $e_2 \gets (v_s, v_{sn})$
+            \State $e_3 \gets (v_e, v_{sn})$
+            \State \Return $(e_2, e_3)$
         \EndIf
     \EndFor
 \EndFor
-\State \Return $l$
+\State \Return null
 \EndFunction
 \newline
-\Function{TRI-ELIM-BTS}{$G=\{V,E\}$, $k$}
-\If{$k == 0$}
+\Function{TRI-ELIM-BST}{$G=\{V,E\}$, $k$}
+\If{$k >= |E|-2$}
+    \State \Return true
+\EndIf
+\If{$k < 0$}
     \State \Return false
 \EndIf
-\State{found $\gets$ false} \Comment{Graph without triangles found}
-\State{trifound $\gets$ false} \Comment{Triangle found in current graph}
 \For{$e_1$ in $E$}
-    \State {$l \gets getTriEdges(e_1)$}
-    \If{$l$ \textbf{is not null}}
-        \State{trifound $\gets$ true}
-        \State {found $\gets$ TRI-ELIM-BTS($G-e_1$, $k-1$)}    
-    \EndIf
-    \For{$t$ in $l$}
-    \State{($e_2$, $e_3$) $\gets$ $t$}
-    \State {found $\gets$ found $||$ TRI-ELIM-BTS($G-e_2$, $k-1$)}
-    \State {found $\gets$ found $||$ TRI-ELIM-BTS($G-e_3$, $k-1$)}
-    \EndFor
-    \If{found}
-    \State \Return true
+    \State $l \gets getTriangle(e_1)$
+    \If{$l$ is not null}
+        \State $(e_2, e_3) \gets l$
+        \State {\#Graph without triangles found}
+        \State {found $\gets$ TRI-ELIM-BTS($G-e_1$, $k-1$)} 
+        \State {found $\gets$ found  $||$ TRI-ELIM-BTS($G-e_2$, $k-1$)}
+        \State {found $\gets$ found  $||$  TRI-ELIM-BTS($G-e_3$, $k-1$)}
+        \State \Return found
+    \Else
+        \State $G \gets G - e_1$
     \EndIf
 \EndFor
-\State \Return{\textbf{not} trifound} \Comment{If no triangle found, return true}
+\State \Return{true} \Comment{If no triangle found, return true}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
-
-%% |E|*
+\subsubsection{Correctesa}
+Analitzem la correctesa de l'algorisme \textbf{TRI-ELIM-BST}:
+\begin{itemize}
+    \item En el cas que tinguem $k > |E|-2$, es trivial veure que si extraiem totes les arestes menys dos, no poden existir triangles a $G$. Per tant retornem cert.
+    \item En el cas en que arribem a $k < 0$, ja no podem fer mes passos, per tant retornem fals.
+    \item Per cada aresta de $E$ existeixen dos casos:
+     \begin{itemize}
+            \item La aresta forma almenys un triangle: En aquest cas, hem de treure almenys una aresta per eliminar el triangle. Com que no sabem quina aresta ens convé treure, provem a treure les tres. En cada cas, restem $k$ en 1, ja que són arestes que formarien part de $F$. Suposant que la crida recursiva es correcte, si en algun dels casos retorna cert, vol dir que seguint aquell camí de l'arbre de solucions hem arribat a una solució, per tant retornem cert.
+            \item La aresta no forma cap triangle: en aquest cas, aquesta aresta mai formarà un triangle, ja que només extraiem arestes. Aquestes arestes no formen part de $F$, per tant les podem treure sense alterar $k$.
+        \end{itemize}
+    \item En cas de no trobar cap triangle, retornem cert. Hem aconseguit obtenir un graf sense triangles.
+\end{itemize}
+\newpage
+\subsubsection{Complexitat}
+Per analitzar la complexitat de l'algorisme aplicarem el teorema mestre:
+\begin{itemize}
+    \item $a = 3$. 3 Crides recursives
+    \item $n = k$. Paràmetre que disminueix
+    \item $c = 1$. Quantitat de disminució
+\end{itemize}
+Per tant
+\[
+a > 1 \Rightarrow T(k) \in 3^k \Rightarrow \text{TRI-ELIM-BST} \in O(3^k)
+\]

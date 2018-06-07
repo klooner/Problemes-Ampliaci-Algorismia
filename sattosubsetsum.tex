@@ -1,0 +1,71 @@
+\section{Reduction: 3SAT to Subset sum}
+In this chapter we try to prove that the \textbf{Subset sum} problem is \textbf{NP-Complete} by providing a polynomial many-to-one reduction from \textbf{3SAT} to \textbf{Subset sum}, knowing that \textbf{3SAT} belongs to \textbf{NP-complete}.
+\subsection{Definitions}
+\subsubsection{3-satisfiability}
+Given a list of boolean variables $U=\{u_1, u_2, ..., u_n\}$ and a set of clauses,
+\newline
+$G=\{c_1, c_2, ..., c_m\}$ in 3-Conjunctive normal form (3-CNF), find an assignment of truth values for $U$ such that all clauses in $G$ are satisfied.
+\newline
+\newline
+\textbf{Example}:
+\newline
+\textbf{Input}: \newline
+$U=\{x_1, x_2, x_3, x_4\}$\newline
+$G=\{c_1, c_2, c_3\}$\newline
+Where:\newline
+$c_1 = x_1 \vee x_2 \vee \overline{x_3}$\newline
+$c_2 = \overline{x_2} \vee x_3 \vee \overline{x_4}$\newline
+$c_3 = x_1 \vee x_2 \vee x_4$\newline
+\textbf{Output}: \newline
+True \newline
+\textbf{Certificate}: \newline
+$x_1= 1, x_2=0, x_3=0, x_4=0$
+
+\subsubsection{Subset sum}
+Given a set $S=\{x_1, x_2, ..., x_n\}$ of integers and an integer $t$, is there a non-empty subset $F \subseteq S$ such that its sum equals to $t$? That is: $\sum F=\sum_{x\ in F}x=t$
+\newline
+\newline
+\textbf{Example}:
+\newline
+\textbf{Input}: \newline
+$S=\{1,4,3,7,9\}$\newline
+$t = 15$\newline
+\textbf{Output}: \newline
+True \newline
+\textbf{Certificate}: \newline
+$F=\{1,4,3,7\}$
+\newpage
+\subsection{Reduction}
+We have to provide a function $f(p) \in P$ such that:
+\[
+\text{SUBSET-SUM}(f(p)) \iff \text{3SAT}(p)
+\]
+Because $p$ is input of 3SAT, $p$ is of the form $(U, G)$. Our function $f$ has to transform $p$ to a set of integers $S$ and an integer $t$ ($f(p)$ is input of Subset Sum) such that exists a subset $F \subseteq S$ and $\sum F=t$ if, and only if, all the clauses in $G$ are satisfiable with an assignment of the variables in $U$. In other words, if 3SAT($p$) is true, then SubsetSum(f(p)) has to be also true, and otherwise.
+
+First, let's construct $f$:
+\newline
+\begin{itemize}
+    \item We generate a set $S$ of numbers $a_i$ base 10 with digits $d_1,..., d_{|G|},d_{|G|+1},...,d_{|G|+|U|}$. This number $a_i$ will represent a truth assignation for one of the variables in $U$ and the clauses that the assignation satisfies. The first $|G|$ digits represent which of the clauses in $G$ are satisfied (1 if it's satisfied, 0 otherwise). The later $|U|$ digits indicates which variable has been assigned (for the variable $x_i$ the digit $d_{|G|+i}=1$, 0 otherwise. Regardless of the value of $x_i$). We generate a number for each truth and false assignation, this is $|S|=2|U|$.
+    \item $t$ will be a number with the same structure as the $a_i$ numbers. The first $|G|$ digits will have value 3 (At least one has to be true for the clause to be true, but we can have at most 3). The next $|U|$ digits will have value of 1. As we want one assignation for every variable.
+\end{itemize}
+
+\textbf{For example:}
+\newline
+$U=\{x_1, x_2, x_3, x_4\}$\newline
+$G=\{c_1, c_2, c_3\}$\newline
+$p=(U, G)$\newline
+\textbf{Where:}\newline
+$c_1 = x_1 \vee x_2 \vee \overline{x_3}$\newline
+$c_2 = \overline{x_2} \vee x_3 \vee \overline{x_4}$\newline
+$c_3 = x_1 \vee x_2 \vee x_4$\newline
+\textbf{Then $f(p)=(S, t)$ where}:\newline
+$a_1 = 1011000$ (This is, the true assignation for variable $x_1$ (last 4 digits) satisfies clauses $c_1$ and $c_3$ (first 3 digits))\newline
+$a'_1 = 0001000$ (The false assignation doesn't satisfy any clause)\newline
+$a_2 = 1010100$\newline
+$a'_2 = 0100100$\newline
+$a_3 = 0100010$\newline
+$a'_3 = 1000010$\newline
+$a_4 = 0100001$\newline
+$a'_4 = 0010001$\newline
+$S=\{a_1, a'_1, a_2, a'_2, a_3, a'_3, a_4, a'_4 \}$\newline
+$t=3331111$\newline
