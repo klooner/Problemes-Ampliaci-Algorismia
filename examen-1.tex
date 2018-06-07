@@ -24,4 +24,11 @@ AdAll has a polynomial time algorithm (\textit{Simple}) for solving a simplified
     \item (d) Assuming that a solution to the LP can be computed in polynomial time, can you design a 3-approximation for AdAll’s problem?
 \end{itemize}
 
+\subsection{Notes}
+Tenim un graf amb pesos a les arestes (cost de travessar aquella aresta) i valors als vertexs (cost de deixar aquell vertex fora de la campanya). Tenim un node $r$ desde el qual comença la "propagació". Soposem que el graf es connex, ja que als vertexos inconnexos no podriem arribar i no tindria sentit .S'enten que les variables indicadores indiquen quins vertexos s'inclouen a la campanya publicitaria, utilitzant quines arestes. El cas on no deixem cap vertex fora es equivalent a calcular el minimum spanning tree del graf. 
+
 \subsection{Solució}
+\subsubsection{Apartat A}
+En llenguatge natural, podem interpretar la inequalitat de la següent manera: \textit{Per tot subconjunt $S$ no buit de $V$ (excloent $r$), el numero d'edges "utilitzats" al tall (S, V-S) (frontera de S), es mes gran que el valor de cada vertex (0 o 1) a S}. En altres paraules, si hi ha un vertex a S inclos a la campanya, hi ha almenys un edge a la frontera que és utilitzat. (Nomes en el cas on cap vertex de S es utilitzat, la suma dels edges utilitzats a la frontera pot ser 0).
+Suposant que això es cert, hem de veure que el subgraf format pels vertices amb $y_i=1$ i les arestes amb $x_e=1$ es un arbre.
+
