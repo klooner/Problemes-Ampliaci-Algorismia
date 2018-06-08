@@ -7,12 +7,12 @@ The social network is given by an undirected graph $G = (V,E)$, having edge cost
 AdAll has a polynomial time algorithm (\textit{Simple}) for solving a simplified version of the problem in which no vertex can be excluded from the campaign. In the following we use indicator variables $y_i$ for vertex $i \in V$ and $x_e$ for edge $e \in E$. Furthermore, we use $\delta(S)$, for $S \subseteq V$ , to denote the edges crossing the cut $(S,V-S)$. 
 
 \begin{itemize}
-    \item (a) Consider that $x_e,y_i \in{0,1}$ verify the following set of inequalities 
+    \item (a) Consider that $x_e,y_i \in \{0,1\}$ verify the following set of inequalities 
     \[
-    \sum_{x_e \in \delta(S)}x_e \ge y_i,  \forall S \subseteq V -{r},S \neq \emptyset,\forall i \in S
+    \sum_{e \in \delta(S)}x_e \ge y_i,  \forall S \subseteq V -\{r\},S \neq \emptyset,\forall i \in S
     \] 
     Show that in such a case the subgraph formed by the vertices with $y_i = 1$ and the edges with $x_e  = 1$ form a tree. 
-    \item (b) Using the above result provide a ILP formulation of the problem. Observe that the number of equations is $n2n$. 
+    \item (b) Using the above result provide a ILP formulation of the problem. Observe that the number of equations is $n2^n$. 
     \item (c) Consider the LP obtained after relaxing the ILP formulation. Let $(x^{*},y^{*})$ be an optimal solution of the LP and let $\alpha \in (0,1]$. Let $U = \{i \in V | y^{*}_i \geq \alpha\}$ and let $T$ be the tree produced by Simple on input $G[U]$. Show that 
     \[
     \sum_{e\in T} c_e \leq \frac{2}{\alpha} \sum_{e\in E} c_e x^{*}_e

@@ -1,0 +1,21 @@
+\section{Problema examen 8}
+\subsection{Enunciat}
+\textbf{Counting assignments vs Counting paths} Let us consider the problem of computing the number of satisfying assignments for a given formula, COUNTING ASSIGNMENTS:
+
+\vspace{5mm}
+\textit{Input}: A boolen formula in conjunctive normal form F. 
+
+\textit{Output}: The number of boolean assignments that satisfy F.
+
+\vspace{5mm}
+Show that it can be computed in polynomial space, that is COUNTING ASSIGNMENTS $\in$ FPSPACE. Furthermore, show that COUNTING ASSIGNMENTS is NP-hard, i.e. show that if COUNTING ASSIGNMENTS $\in$ FP then P = NP. Contrasting with this, the problem of counting the number of paths in a graph can be polynomial time solvable. Formally, let COUNTING PATHS be defined as follows: 
+
+\vspace{5mm}
+\textit{Input}: A directed graph $G = (V,E)$ and two nodes $s,t \in V$ with $s \neq t$. 
+
+\textit{Output}: The number of paths from $s$ to $t$ of length at most $|V|-1$ (some nodes of the path can be repeated). That is, the number of paths $(v_0,...,v_i,v_{i+1},...,v_k)$ where $k \leq |V|-1$, $v_0,...,v_i,v_{i+1},...,v_k \in V$, $v_0 = s$, $v_k = t$, and $(v_i,v_{i+1}) \in E$ for $0 \leq i < |V|-1$. 
+
+\vspace{5mm}
+Show that COUNTING PATHS $\in$ FP.
+
+\subsection{Solució}
