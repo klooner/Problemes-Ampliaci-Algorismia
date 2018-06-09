@@ -9,3 +9,51 @@ that a vertex subset $X$ is \textit{fully connected} if and only if, for every p
 (b) Prove that the decision version of the problem when parameterized by the size of the node hub belongs to FPT
 
 \subsection{Solució}
+\subsubsection{Apartat A}
+En aquest problema és fàcilment reductible al famós problema del Vertex Cover. Per a fer-ho anem a entendre què es vol aconseguir. El \textit{Node hub} és el conjunt de vèrtex $v$ tals que existeix un altre vèrtex $u$ pel qual la distància entre $v$ i $u$ és 3 o més gran.
+
+
+Així, suposem el següent graf $G(V,E)$:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{examen-2-1.jpeg}
+    \label{fig:ex2-1}
+\end{figure}
+
+
+Del $G(V,E)$ es pot obtenir el graf $G'(V',E')$ on $V'$ representa cada un dels vèrtex de $G$, i les arestes $(v,u)$, que la distància entre el vèrtex $v$ i l'$u$ és més petita que 3 (sent $v \neq u$):
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{examen-2-2.jpeg}
+    \label{fig:ex2-2}
+\end{figure}
+
+Un cop tenim el graf $G'$, hem d'invertir les arestes, per tal que aquestes representin els vèrtex amb una distància més gran a 2 entre ells:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\textwidth]{examen-2-3.jpeg}
+    \label{fig:ex2-3}
+\end{figure}
+
+Finalment, podem aplicar un algorisme de 2-aproximació per a Vertex Cover. El conjunt vèrtex $S'$ ($S'$ pertany $V'$) que formin la cobertura formaran part del Node hub de $G$ ($S$ pertany a $V$). Per tant, haurem de demostrar que $S$ és Node hub en $G$ si i només si $S'$ és vèrtex cover en $G'$ per poder concloure que aquesta és una 2 aproximació correcta del problema.
+
+
+$\Rightarrow$
+
+
+Suposem que $S$ no és un Node Hub en $G$, i que per tant, encara existeix algun parell $(v,u)$ de vèrtex fora de $S$ tals que la distància entre ells sigui superior a 2. Llavors, per la definició del graf $G'$, aquest parell formarà una aresta, i al estar fora de $S'$, $S'$ no podràs ser un Vertex Cover, ja que com a mínim haurà de contenir a $v'$ o a $u'$ per tal d'acabar amb la seva aresta.
+
+
+$\Leftarrow$
+
+
+Suposem que $S'$ no és un Vertex Cover, i que existeixen fora de $S'$ existeix algun parell $(v',u')$ que fora una aresta en $G'$. Llavors, per la definició de $G'$, en $G$ hi haurà com a mínim un parell $(v,u)$ amb una distància superior a 2 fora de $S$, i per tant, $\{G-S\}$ no serà fully connected, i $S$ no serà un Node hub.
+\newline
+
+
+Finalment, cal afegir que la creació de $G'$ es pot realitzar en temps $O(V^2 + V*E^2)$ si entenem el graf d'entrada com a una matriu d'adjacències, ja que es necessitem $O(V*E^2)$ per mirar si estan a distància 3, i $O(V^2)$ per invertir les arestes del graf.
+\subsubsection{Apartat B}
+Aquesta demostració és directa, ja que Vertex Cover pertany a FPT ja hem demostrar que la mida del Node hub és equivalent al tamany de la cobertura del Vertex Cover en $G'$.
