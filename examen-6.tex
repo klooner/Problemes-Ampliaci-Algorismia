@@ -7,3 +7,40 @@ ax + by = c
 has integer solutions $x$ and $y$ if and only if $gcd(a,b)$ divides $c$, and that it has either zero or infinitely many integer solutions. Then give a polynomial time algorithm that returns a solution $(x,y)$ where the integers $x,y \geq 0$ or reports that no such solution exists.
 
 \subsection{Solució}
+
+Prueba:
+
+$x,y \in \mathbb{Z} \Longrightarrow gcd(a,b) | c:$ 
+
+Por reducción al absurdo, si $gcd(a,b) = d \not| c$, entonces $c = k*d + r$, $d,r,k \in \mathbb{N}, 0 < r < d$. Podemos expresar la ecuación como $mx + ny = k + r/d$ si dividimos entre $d$ en ambos lados. $m,n \in \mathbb{N}$ ya que vienen de dividir $a$ y $b$ entre $gcd(a,b)$. $r/d \not\in \mathbb{Z}$ ya que esta en el intervalo $]0/d, d/d[ -> ]0,1[$, por lo que $k+r/d \not\in \mathbb{Z}$. Por consecuencia, si $k+r/d=mx+ny \not\in \mathbb{Z}$ y $m,n \in \mathbb{N}$, o $x,y \not\in \mathbb{Z}$ o no son solución de la ecuación.
+
+
+
+$gcd(a,b) | c \Longrightarrow x,y \in \mathbb{Z}:$ 
+
+SIguiendo con la notación $gcd(a,b) = d$, y la ecuación $ax+by=c$ la podemos escribir como $mx+ny=c/d$, donde $m$ y $n$ son coprimos($gcd(m,n)=1$). Si $d|c$ entonces $c/d \in \mathbb{N}$, y por la identidad de Bezout sabemos que existe una solución de enteros para la ecuación $ax+by=gcd(a,b)$. ya que $m$ y $n$ son coprimos, existe una solución  $x_1,y_1 \in \mathbb{Z}$ para $mx_1+ny_1=gcd(m,n)=1$. Entonces la solución para $ax+by=c$ existe y es desarrollando:
+\[
+mx_1+ny_1=1
+\]
+\[
+mx_1*(c/d)+ny_1*(c/d) = c/d
+\]
+\[
+d(mx_1*(c/d)+ny_1*(c/d))=c
+\]
+\[
+a(x_1*(c/d))+b(y_1*(c/d))=c
+\]
+
+Algoritmo:
+
+\begin{enumerate}
+    \item {Ejecutar Extended Euclid con ($a$,$b$) para obtener una $x$, una $y$ y $gcd(a,b) = d$. (tal que $ax + by = d$).}
+    \item {Si $c$ mod $d$ $\neq$ $0$ retornar que no existe solución.}
+    \item {De otra forma (si $c$ mod $d$ = $0$), $m = c/d$, $s = b/gcd(a,b)$, $t = a/gcd(a,b)$.}
+    \item Si $x,y \geq 0$ retornar $x,y$.
+    \item De lo contrario, si $min(x,y) = x$ ($x < 0$), $k = \lceil |x| / s \rceil$, (entonces $k$ es el numero minimo tal que $ks+x \geq 0 $).
+    \item Si $y - k*t \geq 0$ retornar ($x+ks$, $y-kt$), si no retornar que no existe solución.
+    \item En caso $min(x,y)=y$, obtener una k como en el paso 5 cambiando $x$ por $y$,  $s$ por $t$.
+    \item Si $x - k*s \geq 0$ retornar ($x-ks$, $y+kt$), si no retornar que no existe solución.
+\end{enumerate}
